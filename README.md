@@ -1,318 +1,159 @@
-# marked
+GitHub Flavored Markdown
+================================
 
-> A full-featured markdown parser and compiler, written in javascript. Built
-> for speed.
+*View the [source of this content](http://github.github.com/github-flavored-markdown/sample_content.html).*
 
-[![NPM version](https://badge.fury.io/js/marked.png)][badge]
+Let's get the whole "linebreak" thing out of the way. The next paragraph contains two phrases separated by a single newline character:
 
-## Install
+Roses are red
+Violets are blue
 
-``` bash
-npm install marked --save
-```
+The next paragraph has the same phrases, but now they are separated by two spaces and a newline character:
 
-## Usage
+Roses are red  
+Violets are blue
 
-Minimal usage:
+Oh, and one thing I cannot stand is the mangling of words with multiple underscores in them like perform_complicated_task or do_this_and_do_that_and_another_thing.
 
-```js
-console.log(marked('I am using __markdown__.'));
-// Outputs: <p>I am using <i>markdown</i>.</p>
-```
+A bit of the GitHub spice
+-------------------------
 
-Example using all options:
+In addition to the changes in the previous section, certain references are auto-linked:
 
-```js
-// Set default options except highlight which has no default
-marked.setOptions({
-  gfm: true,
-  highlight: function (code, lang, callback) {
-    pygmentize({ lang: lang, format: 'html' }, code, function (err, result) {
-      if (err) return callback(err);
-      callback(null, result.toString());
-    });
-  },
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: true,
-  smartLists: true,
-  smartypants: false,
-  langPrefix: 'lang-'
-});
+* SHA: be6a8cc1c1ecfe9489fb51e4869af15a13fc2cd2
+* User@SHA ref: mojombo@be6a8cc1c1ecfe9489fb51e4869af15a13fc2cd2
+* User/Project@SHA: mojombo/god@be6a8cc1c1ecfe9489fb51e4869af15a13fc2cd2
+* \#Num: #1
+* User/#Num: mojombo#1
+* User/Project#Num: mojombo/god#1
 
-// Using async version of marked
-marked('I am using __markdown__.', function (err, content) {
-  if (err) throw err;
-  console.log(content);
-});
-```
+These are dangerous goodies though, and we need to make sure email addresses don't get mangled:
 
-## marked(markdownString, [options], [callback])
+My email addy is tom@github.com.
 
-### markdownString
+Math is hard, let's go shopping
+-------------------------------
 
-Type: `String`
+In first grade I learned that 5 > 3 and 2 < 7. Maybe some arrows. 1 -> 2 -> 3. 9 <- 8 <- 7.
 
-String of markdown source to be compiled.
+Triangles man! a^2 + b^2 = c^2
 
-### options
+We all like making lists
+------------------------
 
-Type: `Object`
+The above header should be an H2 tag. Now, for a list of fruits:
 
-Hash of options. Can also be set using the `marked.setOptions` method as seen
-above.
+* Red Apples
+* Purple Grapes
+* Green Kiwifruits
 
-### callback
+Let's get crazy:
 
-Type: `Function`
+1.  This is a list item with two paragraphs. Lorem ipsum dolor
+    sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+    mi posuere lectus.
 
-Function called when the `markdownString` has been fully parsed when using
-async highlighting. If the `options` argument is omitted, this can be used as
-the second argument as seen above:
+    Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+    vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
+    sit amet velit.
 
-## Options
+2.  Suspendisse id sem consectetuer libero luctus adipiscing.
 
-### gfm
+What about some code **in** a list? That's insane, right?
 
-Type: `Boolean`
-Default: `true`
+1. In Ruby you can map like this:
 
-Enable [GitHub flavored markdown][gfm].
+        ['a', 'b'].map { |x| x.uppercase }
 
-### highlight
+2. In Rails, you can do a shortcut:
 
-Type: `Function`
+        ['a', 'b'].map(&:uppercase)
 
-A function to highlight code blocks. The function takes three arguments: code,
-lang, and callback. The above example uses async highlighting with
-[node-pygementize-bundled][pygmentize], and here is a synchronous example using
-[highlight.js][highlight] which doesn't require the callback argument:
+Some people seem to like definition lists
 
-```js
-marked.setOptions({
-  highlight: function (code, lang) {
-    return hljs.highlightAuto(lang, code).value;
-  }
-});
-```
+<dl>
+  <dt>Lower cost</dt>
+  <dd>The new version of this product costs significantly less than the previous one!</dd>
+  <dt>Easier to use</dt>
+  <dd>We've changed the product so that it's much easier to use!</dd>
+</dl>
 
-#### highlight arguments
+I am a robot
+------------
 
-`code`
+Maybe you want to print `robot` to the console 1000 times. Why not?
 
-Type: `String`
+    def robot_invasion
+      puts("robot " * 1000)
+    end
 
-The section of code to pass to the highlighter.
+You see, that was formatted as code because it's been indented by four spaces.
 
-`lang`
+How about we throw some angle braces and ampersands in there?
 
-Type: `String`
+    <div class="footer">
+        &copy; 2004 Foo Corporation
+    </div>
 
-The programming language specified in the code block.
+Set in stone
+------------
 
-`callback`
-
-Type: `String`
-
-The callback function to call when using an async highlighter.
-
-### tables
-
-Type: `Boolean`
-Default: `true`
-
-Enable GFM [tables][tables].
-This option requires the `gfm` option to be true.
-
-### breaks
-
-Type: `Boolean`
-Default: `false`
-
-Enable GFM [line breaks][breaks].
-This option requires the `gfm` option to be true.
-
-### pedantic
-
-Type: `Boolean`
-Default: `false`
-
-Conform to obscure parts of `markdown.pl` as much as possible. Don't fix any of
-the original markdown bugs or poor behavior.
-
-### sanitize
-
-Type: `Boolean`
-Default: `false`
-
-Sanitize the output. Ignore any HTML that has been input.
-
-### smartLists
-
-Type: `Boolean`
-Default: `true`
-
-Use smarter list behavior than the original markdown. May eventually be
-default with the old behavior moved into `pedantic`.
-
-### smartypants
-
-Type: `Boolean`
-Default: `false`
-
-Use "smart" typograhic punctuation for things like quotes and dashes.
-
-### langPrefix
-
-Type: `String`
-Default: `lang-`
-
-Set the prefix for code block classes.
-
-## Access to lexer and parser
-
-You also have direct access to the lexer and parser if you so desire.
-
-``` js
-var tokens = marked.lexer(text, options);
-console.log(marked.parser(tokens));
-```
-
-``` js
-var lexer = new marked.Lexer(options);
-var tokens = lexer.lex(text);
-console.log(tokens);
-console.log(lexer.rules);
-```
-
-## CLI
-
-``` bash
-$ marked -o hello.html
-hello world
-^D
-$ cat hello.html
-<p>hello world</p>
-```
-
-## Benchmarks
-
-node v0.4.x
-
-``` bash
-$ node test --bench
-marked completed in 12071ms.
-showdown (reuse converter) completed in 27387ms.
-showdown (new converter) completed in 75617ms.
-markdown-js completed in 70069ms.
-```
-
-node v0.6.x
-
-``` bash
-$ node test --bench
-marked completed in 6448ms.
-marked (gfm) completed in 7357ms.
-marked (pedantic) completed in 6092ms.
-discount completed in 7314ms.
-showdown (reuse converter) completed in 16018ms.
-showdown (new converter) completed in 18234ms.
-markdown-js completed in 24270ms.
-```
-
-__Marked is now faster than Discount, which is written in C.__
-
-For those feeling skeptical: These benchmarks run the entire markdown test suite
-1000 times. The test suite tests every feature. It doesn't cater to specific
-aspects.
-
-node v0.8.x
-
-``` bash
-$ node test --bench
-marked completed in 3411ms.
-marked (gfm) completed in 3727ms.
-marked (pedantic) completed in 3201ms.
-robotskirt completed in 808ms.
-showdown (reuse converter) completed in 11954ms.
-showdown (new converter) completed in 17774ms.
-markdown-js completed in 17191ms.
-```
-
-## Another Javascript Markdown Parser
-
-The point of marked was to create a markdown compiler where it was possible to
-frequently parse huge chunks of markdown without having to worry about
-caching the compiled output somehow...or blocking for an unnecesarily long time.
-
-marked is very concise and still implements all markdown features. It is also
-now fully compatible with the client-side.
-
-marked more or less passes the official markdown test suite in its
-entirety. This is important because a surprising number of markdown compilers
-cannot pass more than a few tests. It was very difficult to get marked as
-compliant as it is. It could have cut corners in several areas for the sake
-of performance, but did not in order to be exactly what you expect in terms
-of a markdown rendering. In fact, this is why marked could be considered at a
-disadvantage in the benchmarks above.
-
-Along with implementing every markdown feature, marked also implements [GFM
-features][gfmf].
-
-``` bash
-$ node
-> require('marked').lexer('> i am using marked.')
-[ { type: 'blockquote_start' },
-  { type: 'paragraph',
-    text: 'i am using marked.' },
-  { type: 'blockquote_end' },
-  links: {} ]
-```
-
-## Running Tests & Contributing
-
-If you want to submit a pull request, make sure your changes pass the test
-suite. If you're adding a new feature, be sure to add your own test.
-
-The marked test suite is set up slightly strangely: `test/new` is for all tests
-that are not part of the original markdown.pl test suite (this is where your
-test should go if you make one). `test/original` is only for the original
-markdown.pl tests. `test/tests` houses both types of tests after they have been
-combined and moved/generated by running `node test --fix` or `marked --test
---fix`.
-
-In other words, if you have a test to add, add it to `test/new/` and then
-regenerate the tests with `node test --fix`. Commit the result. If your test
-uses a certain feature, for example, maybe it assumes GFM is *not* enabled, you
-can add `.nogfm` to the filename. So, `my-test.text` becomes
-`my-test.nogfm.text`. You can do this with any marked option. Say you want
-line breaks and smartypants enabled, your filename should be:
-`my-test.breaks.smartypants.text`.
-
-To run the tests:
-
-``` bash
-cd marked/
-node test
-```
-
-### Contribution and License Agreement
-
-If you contribute code to marked, you are implicitly allowing your code to be
-distributed under the MIT license. You are also implicitly verifying that all
-code is your original work. `</legalese>`
-
-## License
-
-Copyright (c) 2011-2013, Christopher Jeffrey. (MIT License)
-
-See LICENSE for more info.
-
-[gfm]: https://help.github.com/articles/github-flavored-markdown
-[gfmf]: http://github.github.com/github-flavored-markdown/
-[pygmentize]: https://github.com/rvagg/node-pygmentize-bundled
-[highlight]: https://github.com/isagalaev/highlight.js
-[badge]: http://badge.fury.io/js/marked
-[tables]: https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#wiki-tables
-[breaks]: https://help.github.com/articles/github-flavored-markdown#newlines
+Preformatted blocks are useful for ASCII art:
+
+<pre>
+             ,-. 
+    ,     ,-.   ,-. 
+   / \   (   )-(   ) 
+   \ |  ,.>-(   )-< 
+    \|,' (   )-(   ) 
+     Y ___`-'   `-' 
+     |/__/   `-' 
+     | 
+     | 
+     |    -hrr- 
+  ___|_____________ 
+</pre>
+
+Playing the blame game
+----------------------
+
+If you need to blame someone, the best way to do so is by quoting them:
+
+> I, at any rate, am convinced that He does not throw dice.
+
+Or perhaps someone a little less eloquent:
+
+> I wish you'd have given me this written question ahead of time so I
+> could plan for it... I'm sure something will pop into my head here in
+> the midst of this press conference, with all the pressure of trying to
+> come up with answer, but it hadn't yet...
+>
+> I don't want to sound like
+> I have made no mistakes. I'm confident I have. I just haven't - you
+> just put me under the spot here, and maybe I'm not as quick on my feet
+> as I should be in coming up with one.
+
+Table for two
+-------------
+
+<table>
+  <tr>
+    <th>ID</th><th>Name</th><th>Rank</th>
+  </tr>
+  <tr>
+    <td>1</td><td>Tom Preston-Werner</td><td>Awesome</td>
+  </tr>
+  <tr>
+    <td>2</td><td>Albert Einstein</td><td>Nearly as awesome</td>
+  </tr>
+</table>
+
+Crazy linking action
+--------------------
+
+I get 10 times more traffic from [Google] [1] than from
+[Yahoo] [2] or [MSN] [3].
+
+  [1]: http://google.com/        "Google"
+  [2]: http://search.yahoo.com/  "Yahoo Search"
+  [3]: http://search.msn.com/    "MSN Search"
